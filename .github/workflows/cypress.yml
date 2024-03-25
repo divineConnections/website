@@ -1,0 +1,38 @@
+name: Cypress Tests
+on:
+  pull_request:
+    branches: 
+      - develop
+  merge_group:
+    branches: 
+      - develop
+jobs:
+  cypress-run:
+    runs-on: ubuntu-latest
+    # Runs tests in parallel with matrix strategy https://docs.cypress.io/guides/guides/parallelization
+    # https://docs.github.com/en/actions/using-jobs/using-a-matrix-for-your-jobs
+    # Also see warning here https://github.com/cypress-io/github-action#parallel
+    strategy:
+      fail-fast: false # https://github.com/cypress-io/github-action/issues/48
+      matrix:
+        containers: [1]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Install NodeJs
+        uses: actions/setup-node@v3
+        
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3.0.0
+        
+      - name: Install Cypress
+        # Uses the official Cypress GitHub action https://github.com/cypress-io/github-action
+        uses: cypress-io/github-action@v6
+        with:
+          runTests: false
+      - name: Run Cypress
+        run: pnpm run ci
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
