@@ -14,6 +14,7 @@ function Counter({ count: initialCount = 0, countBy = 1, ...props }: CounterProp
 
   return (
     <div className="ui-flex ui-items-center ui-gap-x-4 ui-p-4" data-cy={props.cy}>
+      {/* fix */}
       <button
         onClick={() => setCount(count + countBy)}
         className="ui-rounded-lg ui-bg-primary ui-p-3 ui-text-white"
